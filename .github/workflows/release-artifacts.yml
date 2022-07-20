@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - 'v[0-9]+.*'
+      - "v[0-9]+.*"
 jobs:
   create_release:
     name: Create release
@@ -19,15 +19,13 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-release_assets:
+  release_assets:
     name: Release assets
     needs: create_release # we need to know the upload URL
-    runs-on: ${{ matrix.config.os }} # we run many different builds
+    runs-on: ${{ matrix.platform }} # we run many different builds
     strategy:
       matrix:
-        config:
-          - os: ubuntu-latest
-          - os: macos-latest
+        platform: [ubuntu-latest, macos-latest]
     steps:
       # checkout
       - name: Checkout code
@@ -46,7 +44,7 @@ release_assets:
           # you like, remember that they need to be different for each platform.
           # You can choose any build matrix parameters. For Rust I use the
           # target triple.
-          asset_name: qjsc-${{ matrix.config.os }}
+          asset_name: qjsc-${{ matrix.platform }}
           # The path to the file you want to upload.
           asset_path: ./
           # probably you will need to change it, but most likely you are
