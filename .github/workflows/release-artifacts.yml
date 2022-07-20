@@ -39,7 +39,7 @@ jobs:
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
           # This is how it will be named on the release page.
-          asset_name: qjsc-${{ env.RUNNER_OS }}-${{ env.RUNNER_ARCH }}
+          asset_name: qjsc-${{ runner.os }}-${{ runner.arch }}
           # The path to the file you want to upload.
           asset_path: ./qjsc
           # set type of the file you are uploading
