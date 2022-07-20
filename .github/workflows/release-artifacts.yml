@@ -16,7 +16,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: ${{ github.ref }}
           draft: false
           prerelease: false
   release_assets:
@@ -44,7 +44,7 @@ jobs:
           # you like, remember that they need to be different for each platform.
           # You can choose any build matrix parameters. For Rust I use the
           # target triple.
-          asset_name: qjsc-${{ matrix.platform }}
+          asset_name: qjsc
           # The path to the file you want to upload.
           asset_path: ./
           # probably you will need to change it, but most likely you are
