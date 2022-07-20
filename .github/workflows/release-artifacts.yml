@@ -30,23 +30,19 @@ jobs:
       # checkout
       - name: Checkout code
         uses: actions/checkout@v1
-      # ... whatever build and packaging steps you need here
-      # and finally do an upload!
       - name: Build qjsc
         run: ./build.sh
+      - name: Get system info
+        run: OS=$(uname -s) && ARCH=$(uname -m)
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          # This is how it will be named on the release page. Put watever name
-          # you like, remember that they need to be different for each platform.
-          # You can choose any build matrix parameters. For Rust I use the
-          # target triple.
-          asset_name: qjsc
+          # This is how it will be named on the release page.
+          asset_name: qjsc-${OS}-${ARCH}
           # The path to the file you want to upload.
           asset_path: ./qjsc
-          # probably you will need to change it, but most likely you are
-          # uploading a binary file
+          # set type of the file you are uploading
           asset_content_type: application/octet-stream
