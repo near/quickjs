@@ -31,7 +31,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Build qjsc
-        run: ./build.sh
+        run: make qjsc
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
