@@ -19,26 +19,19 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
-  release_assets:
-    name: Release assets
+  release_assets_linux_mac:
+    name: Release Linux and MacOS assets
     needs: create_release # we need to know the upload URL
     runs-on: ${{ matrix.platform }} # we run many different builds
     strategy:
       matrix:
-        platform: [ubuntu-latest]
+        platform: [ubuntu-latest, macos-latest]
     steps:
       # checkout
       - name: Checkout code
         uses: actions/checkout@v1
-      - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x64
-        if: matrix.platform == 'ubuntu-latest'
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       - name: Build qjsc
-        run: make qjsc
+        run: ./build.sh
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -51,3 +44,30 @@ jobs:
           asset_path: ./qjsc
           # set type of the file you are uploading
           asset_content_type: application/octet-stream
+  release_assets_windows:
+    name: Release Windows assets
+    needs: create_release # we need to know the upload URL
+    runs-on: ubuntu-latest
+    steps:
+      # checkout
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+      - name: Build qjsc
+        run: make CONFIG_WIN32=y
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          # This is how it will be named on the release page.
+          asset_name: qjsc-win32-${{ runner.arch }}
+          # The path to the file you want to upload.
+          asset_path: ./qjsc.exe
+          # set type of the file you are uploading
+          asset_content_type: application/octet-stream
+
