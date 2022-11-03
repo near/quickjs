@@ -20,7 +20,7 @@ jobs:
           draft: false
           prerelease: false
   release_assets_linux_mac:
-    name: Release Linux and MacOS assets
+    name: Release assets
     needs: create_release # we need to know the upload URL
     runs-on: ${{ matrix.platform }} # we run many different builds
     strategy:
@@ -45,7 +45,7 @@ jobs:
           # set type of the file you are uploading
           asset_content_type: application/octet-stream
   release_assets_windows:
-    name: Release Windows assets
+    name: Release assets (Windows)
     needs: create_release # we need to know the upload URL
     runs-on: ubuntu-latest
     steps:
@@ -65,7 +65,7 @@ jobs:
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
           # This is how it will be named on the release page.
-          asset_name: qjsc-win32-${{ runner.arch }}
+          asset_name: qjsc-win32-${{ runner.arch }}.exe
           # The path to the file you want to upload.
           asset_path: ./qjsc.exe
           # set type of the file you are uploading
