@@ -35,10 +35,10 @@ jobs:
         with:
           platform: x64
         if: matrix.platform == 'ubuntu-latest'
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
       - name: Build qjsc
         run: make qjsc
-      - name: ls
-        run: ls
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:

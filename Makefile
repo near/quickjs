@@ -36,7 +36,7 @@ CONFIG_LTO=y
 
 ifdef CONFIG_DARWIN
 # use clang instead of gcc
-# CONFIG_CLANG=y
+CONFIG_CLANG=y
 CONFIG_DEFAULT_AR=y
 endif
 
