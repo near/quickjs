@@ -50,7 +50,7 @@
 
 #define OPTIMIZE         1
 #define SHORT_OPCODES    1
-#if defined(EMSCRIPTEN)
+#if defined(__wasm__)
 #define DIRECT_DISPATCH  0
 #else
 #define DIRECT_DISPATCH  1
@@ -114,6 +114,8 @@
 #include <stdatomic.h>
 #include <errno.h>
 #endif
+
+#include <unistd.h>
 
 enum {
     /* classid tag        */    /* union usage   | properties */
@@ -41945,9 +41947,7 @@ static uint64_t xorshift64star(uint64_t *pstate)
 
 static void js_random_init(JSContext *ctx)
 {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    ctx->random_state = ((int64_t)tv.tv_sec * 1000000) + tv.tv_usec;
+    getentropy(&ctx->random_state, sizeof(ctx->random_state));
     /* the state must be non zero */
     if (ctx->random_state == 0)
         ctx->random_state = 1;
